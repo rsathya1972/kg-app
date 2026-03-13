@@ -1,0 +1,12 @@
+Ontology Graph Studio — Sample Document
+
+This is a placeholder document. Replace this file with real domain text to test
+the entity extraction and knowledge graph ingestion pipeline.
+
+Example domains:
+- Life sciences (genes, proteins, diseases, pathways)
+- Legal (cases, statutes, parties, jurisdictions)
+- Finance (companies, instruments, transactions, regulations)
+- Manufacturing (products, components, suppliers, processes)
+
+Drop your documents in this folder and upload them via the UI.
