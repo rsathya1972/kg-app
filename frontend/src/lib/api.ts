@@ -16,6 +16,7 @@ import type {
   OntologyListResponse,
   OntologyVersionDetail,
   ProposalListResponse,
+  QueryResponse,
   RelationshipListResponse,
   SearchResponse,
 } from "./types";
@@ -232,6 +233,18 @@ export function streamAgentRun(
   };
   source.onerror = () => source.close();
   return () => source.close();
+}
+
+// ── Query ──────────────────────────────────────────────────────────────────────
+
+export async function queryKnowledgeGraph(
+  query: string,
+  documentId?: string
+): Promise<QueryResponse> {
+  return apiFetch<QueryResponse>("/query", {
+    method: "POST",
+    body: JSON.stringify({ query, document_id: documentId }),
+  });
 }
 
 // ── GraphRAG ───────────────────────────────────────────────────────────────────

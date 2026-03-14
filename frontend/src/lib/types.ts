@@ -272,6 +272,17 @@ export interface AgentEvent {
   status?: string;
 }
 
+// ── Query ──────────────────────────────────────────────────────────────────────
+
+export interface QueryResponse {
+  query: string;
+  cypher: string | null;
+  results: Record<string, unknown>[];
+  answer: string | null;
+  sources: Record<string, unknown>[];
+  error: string | null;
+}
+
 // ── Learning / Knowledge Health ────────────────────────────────────────────────
 
 export interface KnowledgeIssue {
