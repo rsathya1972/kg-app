@@ -10,6 +10,11 @@ import {
   Globe,
   Search,
   ShieldCheck,
+  Sparkles,
+  Bot,
+  Brain,
+  Activity,
+  HelpCircle,
 } from "lucide-react";
 
 const navItems = [
@@ -19,7 +24,12 @@ const navItems = [
   { href: "/ontology", label: "Ontology", icon: GitBranch },
   { href: "/graph", label: "Graph Viewer", icon: Globe },
   { href: "/query", label: "Query", icon: Search },
+  { href: "/knowledge-copilot", label: "Knowledge Copilot", icon: Brain },
+  { href: "/knowledge-health", label: "Knowledge Health", icon: Activity },
   { href: "/validation", label: "Validation", icon: ShieldCheck },
+  { href: "/semantic-search", label: "Semantic Search", icon: Sparkles },
+  { href: "/agents", label: "Agent Monitor", icon: Bot },
+  { href: "/help", label: "Help & Docs", icon: HelpCircle },
 ];
 
 export default function LeftNav() {

@@ -91,3 +91,29 @@
 - Eliminates "works on my machine" issues for PostgreSQL setup
 - Frontend developer can `docker compose up` without Python knowledge
 - Production deployment strategy (cloud) deferred — Compose is the right scope for MVP
+
+---
+
+## ADR-009: Module-Per-Domain Package Layout
+
+**Decision**: Organize backend code into one Python package per domain module (`ingestion`, `preprocessing`, `extraction`, `ontology`, `graph`, `query`, `validation`, `utils`).
+
+**Rationale**:
+- Each domain has a clear `base.py` defining its ABC/dataclasses — a stable contract
+- New developers can find all ingestion logic in one place, all graph logic in another
+- Stubs follow the same pattern as real implementations — swap in without touching route code
+- `utils/` is a shared toolkit imported by all modules with no circular dependencies
+
+**Trade-off**: More files than a flat layout, but necessary for a platform that will grow to 50+ files.
+
+---
+
+## ADR-010: Stubs Raise NotImplementedError, Routes Return HTTP 501
+
+**Decision**: Unimplemented service methods raise `NotImplementedError`; API routes catch this and return HTTP 501 `{"status": "not_implemented"}`.
+
+**Rationale**:
+- Routes are immediately testable (Swagger, curl) without any real logic
+- `NotImplementedError` gives a clear traceback pointing to exactly which stub needs work
+- Consistent pattern across all 7 domain modules
+- Avoids silent no-ops that could be mistaken for working implementations

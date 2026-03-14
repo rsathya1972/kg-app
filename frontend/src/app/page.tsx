@@ -9,6 +9,7 @@ import {
   Globe,
   Search,
   ShieldCheck,
+  Sparkles,
   ArrowRight,
 } from "lucide-react";
 import { getHealth } from "@/lib/api";
@@ -51,6 +52,12 @@ const sections = [
     label: "Validation",
     icon: ShieldCheck,
     description: "Validate graph consistency against ontology rules and constraints.",
+  },
+  {
+    href: "/semantic-search",
+    label: "Semantic Search",
+    icon: Sparkles,
+    description: "Search document chunks by meaning using vector embeddings.",
   },
 ];
 

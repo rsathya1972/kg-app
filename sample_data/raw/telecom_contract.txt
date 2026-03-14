@@ -1,0 +1,204 @@
+TELECOMMUNICATIONS SERVICES AGREEMENT
+
+Contract Reference: TSA-2024-0047
+Effective Date: January 1, 2024
+Expiration Date: December 31, 2026
+
+PARTIES
+
+This Telecommunications Services Agreement ("Agreement") is entered into between:
+
+Service Provider:
+NexaTel Communications, Inc.
+1200 Innovation Drive, Suite 400
+Austin, Texas 78701
+("NexaTel" or "Provider")
+
+Customer:
+Meridian Financial Group, LLC
+500 Commerce Boulevard, Floor 12
+Chicago, Illinois 60601
+("Meridian" or "Customer")
+
+ACCOUNT MANAGEMENT
+
+Primary Account Manager (Provider): Sarah Chen, Director of Enterprise Accounts
+Technical Account Manager (Provider): Marcus Rodriguez, Senior Solutions Engineer
+Customer Contact: David Okonkwo, VP of Technology Infrastructure
+
+---
+
+SECTION 1 — SERVICES
+
+1.1 Service Description
+
+NexaTel agrees to provide the following telecommunications products and services to Meridian Financial Group:
+
+  a) NexaTel Unified Connect Pro — Enterprise VoIP platform supporting up to 1,200 concurrent users with 99.99% uptime SLA.
+  b) NexaTel SecureLink SD-WAN — Software-defined wide area network solution connecting 18 branch office locations across the United States.
+  c) NexaTel CloudPBX — Cloud-hosted private branch exchange with advanced call routing, IVR, and analytics dashboard.
+  d) NexaTel DataShield DDoS Protection — Always-on volumetric and application-layer attack mitigation service.
+  e) Dedicated Internet Access (DIA) — 10 Gbps symmetrical fiber connection at Meridian's primary data center in Chicago, Illinois.
+
+1.2 Service Locations
+
+Services will be delivered at the following locations:
+  - Primary Data Center: 500 Commerce Boulevard, Chicago, IL 60601
+  - Secondary Data Center: 8800 West Corporate Drive, Naperville, IL 60563
+  - Regional Offices: Dallas TX, Atlanta GA, New York NY, San Francisco CA (18 branches total)
+
+---
+
+SECTION 2 — TERM AND FEES
+
+2.1 Contract Term
+
+The initial term of this Agreement is thirty-six (36) months, commencing January 1, 2024 and terminating December 31, 2026, unless earlier terminated in accordance with Section 9 of this Agreement.
+
+2.2 Monthly Recurring Charges
+
+  - NexaTel Unified Connect Pro: $14,400/month
+  - NexaTel SecureLink SD-WAN (18 sites): $22,500/month
+  - NexaTel CloudPBX: $3,600/month
+  - NexaTel DataShield DDoS Protection: $4,200/month
+  - Dedicated Internet Access (10 Gbps): $8,750/month
+  - Total MRC: $53,450/month
+
+2.3 Non-Recurring Charges
+
+  - Installation and provisioning fees: $28,000 (one-time)
+  - Hardware (NexaTel Edge Gateway NE-5000, qty 18): $72,000 (one-time)
+
+---
+
+SECTION 3 — SERVICE LEVEL AGREEMENT
+
+3.1 Uptime Guarantee
+
+NexaTel commits to the following service availability levels:
+
+  - NexaTel Unified Connect Pro: 99.99% monthly uptime (≤ 4.38 minutes downtime/month)
+  - NexaTel SecureLink SD-WAN: 99.95% monthly uptime per site
+  - Dedicated Internet Access: 99.99% monthly uptime
+
+3.2 Mean Time to Repair (MTTR)
+
+  - Priority 1 (Complete outage): 4-hour MTTR
+  - Priority 2 (Degraded service): 8-hour MTTR
+  - Priority 3 (Minor issue): 48-hour MTTR
+
+3.3 Service Credits
+
+In the event NexaTel fails to meet the uptime guarantees stated in Section 3.1, Meridian shall be entitled to service credits calculated as follows:
+  - 99.9% – 99.99%: 5% credit of monthly fee for affected service
+  - 99.0% – 99.9%: 10% credit
+  - Below 99.0%: 25% credit
+
+---
+
+SECTION 4 — REGULATORY COMPLIANCE
+
+4.1 Communications Act Compliance
+
+NexaTel represents that all services provided under this Agreement comply with the Communications Act of 1934, as amended, including Title II common carrier provisions applicable to broadband internet access services.
+
+4.2 CPNI Obligations
+
+Both parties shall comply with Customer Proprietary Network Information (CPNI) requirements set forth in 47 U.S.C. § 222 and FCC regulations in 47 C.F.R. Part 64, Subpart U.
+
+4.3 CALEA Compliance
+
+NexaTel acknowledges its obligations under the Communications Assistance for Law Enforcement Act (CALEA), 47 U.S.C. § 1001 et seq., and maintains technical capabilities required thereunder.
+
+4.4 State Regulations
+
+Services provided in Illinois shall comply with the Illinois Public Utilities Act (220 ILCS 5/) and applicable Illinois Commerce Commission (ICC) rules. Services in Texas shall comply with the Texas Utilities Code and orders of the Public Utility Commission of Texas (PUCT).
+
+4.5 Data Protection
+
+Processing of personal data shall comply with the Illinois Personal Information Protection Act (PIPA), 815 ILCS 530/, and the California Consumer Privacy Act (CCPA) to the extent applicable to Meridian's California operations.
+
+---
+
+SECTION 5 — TECHNOLOGY SPECIFICATIONS
+
+5.1 Network Infrastructure
+
+The SD-WAN solution shall operate using NexaTel's Tier 1 backbone network leveraging BGP routing protocol with MPLS traffic engineering. The solution uses OpenFlow-enabled switching infrastructure compatible with NexaTel's Software-Defined Networking Controller Platform (SDNCP v4.2).
+
+5.2 Security Standards
+
+  - Encryption: AES-256 for data in transit; TLS 1.3 minimum for all management interfaces
+  - Authentication: Multi-factor authentication (MFA) required for all administrative access; compatible with Microsoft Azure Active Directory and Okta SAML 2.0
+  - Monitoring: Integration with Meridian's existing Splunk SIEM platform via syslog (RFC 5424)
+
+5.3 Hardware
+
+NexaTel Edge Gateway NE-5000 specifications:
+  - Throughput: 10 Gbps full-duplex
+  - WAN interfaces: 4x 10GbE SFP+
+  - LAN interfaces: 8x 1GbE RJ45
+  - CPU: Intel Xeon D-2183IT, 16-core
+  - Memory: 64 GB DDR4 ECC
+  - Storage: 480 GB NVMe SSD
+  - Operating System: NexaTel NexOS 7.4.2
+
+---
+
+SECTION 6 — POLICIES
+
+6.1 Acceptable Use Policy
+
+Customer agrees to abide by NexaTel's Acceptable Use Policy (AUP), available at nexatel.com/legal/aup, as updated from time to time. Prohibited uses include, but are not limited to: spam transmission, port scanning, unauthorized network probing, and facilitation of illegal activity.
+
+6.2 Network Management Policy
+
+NexaTel reserves the right to implement reasonable network management practices consistent with the FCC's Open Internet Order (Report and Order on Remand, Declaratory Ruling, and Order, 30 FCC Rcd 5601 (2015)) and applicable law.
+
+6.3 Data Retention Policy
+
+NexaTel will retain call detail records (CDRs) and network logs for a minimum of 18 months in accordance with applicable legal requirements and NexaTel's internal data governance policies. Meridian may request CDR exports at no additional charge.
+
+6.4 Change Management Policy
+
+Any changes to network configuration, IP address assignments, or service parameters must follow NexaTel's Change Advisory Board (CAB) process. Emergency changes require approval from both Sarah Chen and David Okonkwo. Standard changes require 72-hour advance notice.
+
+---
+
+SECTION 7 — PAYMENT TERMS
+
+Invoices are due net 30 days from invoice date. Late payments accrue interest at 1.5% per month. Meridian shall pay via ACH to NexaTel's designated bank account. All fees are exclusive of applicable taxes.
+
+---
+
+SECTION 8 — CONFIDENTIALITY
+
+Each party agrees to keep confidential all non-public information received from the other party and to use such information solely in connection with this Agreement.
+
+---
+
+SECTION 9 — TERMINATION
+
+9.1 Either party may terminate this Agreement upon 90 days written notice to the other party. Early termination by Meridian prior to expiration of the initial term shall result in an early termination fee equal to 50% of remaining monthly recurring charges.
+
+9.2 Either party may terminate immediately upon written notice if the other party materially breaches this Agreement and fails to cure such breach within 30 days of written notice.
+
+---
+
+SECTION 10 — GOVERNING LAW
+
+This Agreement shall be governed by the laws of the State of Texas, without regard to conflict of law principles. Disputes shall be resolved by binding arbitration in Austin, Texas under AAA Commercial Arbitration Rules.
+
+---
+
+SIGNATURES
+
+For NexaTel Communications, Inc.:
+/s/ Jennifer Park
+Jennifer Park, Chief Revenue Officer
+Date: December 15, 2023
+
+For Meridian Financial Group, LLC:
+/s/ David Okonkwo
+David Okonkwo, VP of Technology Infrastructure
+Date: December 18, 2023

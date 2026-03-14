@@ -1,0 +1,382 @@
+Cloud Architecture Reference Notes
+Engineering Team — Internal Knowledge Base
+Last Updated: March 2026
+
+============================================================
+1. CORE ARCHITECTURAL PRINCIPLES
+============================================================
+
+1.1 Design Philosophy
+----------------------
+Our cloud architecture follows a cell-based design where the platform is divided into independent "cells" — isolated units that each serve a subset of customers. Failures in one cell do not impact others. Each cell is a complete deployment unit: compute, storage, messaging, and routing.
+
+Key principles we apply:
+- Loose coupling: Services communicate via events or well-defined APIs, never shared databases
+- High cohesion: Each service owns its domain completely (data + logic)
+- Fail-fast: Services should detect and surface failures immediately rather than degrading silently
+- Defense in depth: Security controls at network, application, and data layers
+- Immutable infrastructure: Servers are never modified in place; all changes are deployed as new images
+
+1.2 The Twelve-Factor Application
+-----------------------------------
+All services are built following the twelve-factor methodology:
+
+1. Codebase: One codebase per service, tracked in Git, deployed to multiple environments
+2. Dependencies: Explicitly declared in requirements.txt / package.json / go.mod
+3. Config: All config from environment variables, never hardcoded
+4. Backing services: Databases, queues, caches treated as attached resources (swappable)
+5. Build/release/run: Strict separation between build, release (config), and run stages
+6. Processes: Apps execute as stateless processes; state stored in external backing services
+7. Port binding: Services self-contained; export services via port binding (not app server injection)
+8. Concurrency: Scale horizontally via the process model; no threading magic
+9. Disposability: Fast startup, graceful shutdown, crash-resistant (idempotent consumers)
+10. Dev/prod parity: Keep development, staging, and production as similar as possible
+11. Logs: Treat logs as event streams; write to stdout, let the platform route them
+12. Admin processes: Run admin/maintenance tasks as one-off processes in the same environment
+
+============================================================
+2. COMPUTE LAYER
+============================================================
+
+2.1 Kubernetes Architecture
+-----------------------------
+Production runs on Kubernetes 1.29+ with the following cluster topology:
+
+Control Plane:
+- 3 control plane nodes across 3 availability zones
+- etcd running on dedicated nodes (not co-located with API server)
+- API server exposed only to internal network + VPN clients
+
+Worker Node Pools:
+- General purpose pool: m5.2xlarge nodes (16 vCPU, 32 GB RAM), min 6 nodes, max 50 nodes
+- Memory-optimized pool: r5.2xlarge (16 vCPU, 64 GB RAM) for databases and ML workloads
+- GPU pool: g4dn.xlarge nodes for inference workloads (0–10 nodes, scale to zero overnight)
+- Spot pool: m5.2xlarge spot instances for batch/background jobs (70% cost reduction)
+
+Key Kubernetes add-ons:
+- Cluster Autoscaler: Automatically scales node pools based on pending pod demand
+- Karpenter: Provisions right-sized nodes, consolidates underutilized nodes
+- Vertical Pod Autoscaler (VPA): Recommends and optionally applies CPU/memory right-sizing
+- KEDA: Event-driven autoscaling for queue consumers (scales pods to zero when idle)
+
+2.2 Container Standards
+------------------------
+All containers must comply with the following standards:
+
+Base images:
+- Python services: python:3.12-slim (not full Python image — 80% smaller)
+- Node.js services: node:20-alpine
+- Go services: scratch (statically linked binary only)
+- Never use :latest tag in production — always pin to a specific SHA digest
+
+Security requirements:
+- Run as non-root user (UID 1000)
+- Read-only root filesystem where possible
+- No capabilities beyond what the app needs
+- Resource limits required on all production containers
+
+Resource requests and limits pattern:
+  requests:
+    cpu: "100m"       # guaranteed allocation
+    memory: "256Mi"   # guaranteed allocation
+  limits:
+    cpu: "500m"       # max burst
+    memory: "512Mi"   # OOM kill threshold
+
+2.3 Serverless Components
+--------------------------
+We use AWS Lambda for:
+- Webhook handlers (event-triggered, bursty traffic)
+- Scheduled jobs replacing traditional cron (via EventBridge Scheduler)
+- File processing pipelines (S3 trigger → Lambda → DynamoDB)
+- Edge compute via Lambda@Edge for CDN customization
+
+Lambda best practices we follow:
+- Keep handlers thin: business logic in shared libraries, not in handler function
+- Use Lambda Layers for shared dependencies (avoids re-bundling across functions)
+- Set reserved concurrency to protect downstream databases from Lambda storms
+- Enable X-Ray tracing for distributed request tracking
+
+============================================================
+3. DATA LAYER
+============================================================
+
+3.1 Database Strategy
+----------------------
+We follow a "database per service" pattern. Each microservice owns its own data store. Cross-service data access goes through the API, never direct DB queries.
+
+Primary databases by use case:
+
+Transactional (OLTP):
+- PostgreSQL 16 for all relational workloads
+- pgvector extension for embedding storage and similarity search
+- PgBouncer connection pooler in front of all PostgreSQL instances
+- Patroni for high availability with automatic failover
+
+Document storage:
+- MongoDB Atlas for semi-structured data (activity feeds, configuration)
+- Collections designed for query patterns, not normalization
+
+Search:
+- Elasticsearch 8.x for full-text search and log analytics
+- OpenSearch for cost-sensitive workloads where ES licensing is a concern
+
+Cache:
+- Redis 7 (ElastiCache) for session storage, rate limiting counters, hot data
+- Redis Cluster mode for horizontal scaling beyond single-node limits
+
+3.2 PostgreSQL Configuration Best Practices
+--------------------------------------------
+Key parameters we tune for production:
+
+Connection settings:
+  max_connections = 200          # Set low; rely on PgBouncer for pooling
+  shared_buffers = 8GB           # 25% of available RAM
+  effective_cache_size = 24GB    # 75% of available RAM
+  work_mem = 64MB                # Per sort/hash operation; watch parallel queries
+  maintenance_work_mem = 2GB     # For VACUUM, CREATE INDEX
+
+WAL and checkpoint settings:
+  wal_level = replica            # Required for streaming replication
+  max_wal_senders = 5
+  checkpoint_completion_target = 0.9
+  wal_buffers = 64MB
+  min_wal_size = 1GB
+  max_wal_size = 4GB
+
+3.3 pgvector Usage
+-------------------
+We use pgvector for storing and querying embedding vectors for the knowledge graph semantic layer.
+
+Setup:
+  CREATE EXTENSION IF NOT EXISTS vector;
+
+Creating a table with vector column:
+  CREATE TABLE chunk_embeddings (
+      id UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+      document_id UUID NOT NULL REFERENCES documents(id) ON DELETE CASCADE,
+      chunk_index INTEGER NOT NULL,
+      text TEXT NOT NULL,
+      embedding vector(1536),    -- OpenAI text-embedding-3-small
+      token_count INTEGER,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+  );
+
+Creating an index for fast similarity search:
+  CREATE INDEX ON chunk_embeddings
+  USING ivfflat (embedding vector_cosine_ops)
+  WITH (lists = 100);
+
+Cosine similarity search:
+  SELECT id, text,
+         1 - (embedding <=> '[0.1, 0.2, ...]'::vector) AS similarity
+  FROM chunk_embeddings
+  ORDER BY embedding <=> '[0.1, 0.2, ...]'::vector
+  LIMIT 10;
+
+HNSW index (better recall, more memory):
+  CREATE INDEX ON chunk_embeddings
+  USING hnsw (embedding vector_cosine_ops)
+  WITH (m = 16, ef_construction = 64);
+
+3.4 Data Migration Strategy
+-----------------------------
+We use a three-phase migration approach to avoid downtime:
+
+Phase 1 — Expand: Add new columns/tables, keep old ones. Deploy code that writes to both.
+Phase 2 — Migrate: Run a background migration job to backfill data.
+Phase 3 — Contract: Once all data is migrated and old code is retired, drop old columns.
+
+Migration tools:
+- Flyway for Java services
+- Alembic for Python/SQLAlchemy services
+- golang-migrate for Go services
+
+Never run migrations in application startup code in production — run them as a separate pre-deploy step.
+
+============================================================
+4. NETWORKING LAYER
+============================================================
+
+4.1 Network Topology
+---------------------
+Our VPC design uses a hub-and-spoke model:
+
+Hub VPC:
+- Shared services: VPN gateway, DNS resolvers, NAT gateways, Transit Gateway
+- Security tooling: IDS/IPS, WAF, certificate management
+
+Spoke VPCs (one per environment):
+- Production: 10.0.0.0/16
+- Staging: 10.1.0.0/16
+- Development: 10.2.0.0/16
+- Data: 10.3.0.0/16 (isolated VPC for analytics workloads)
+
+Subnet design within each VPC:
+- Public subnets (10.x.0.0/24): Load balancers only; no application instances
+- Private subnets (10.x.1.0/24): Application workloads (Kubernetes nodes)
+- Isolated subnets (10.x.2.0/24): Databases; no outbound internet access
+
+4.2 Service Mesh
+-----------------
+We use Istio as our service mesh in the Kubernetes cluster:
+
+Traffic management:
+- VirtualService resources define routing rules (canary, header-based, weighted)
+- DestinationRule configures load balancing and circuit breaking per service
+- Canary deployments: shift 5% → 25% → 100% traffic based on error rate thresholds
+
+Security:
+- Mutual TLS (mTLS) enforced for all pod-to-pod communication
+- PeerAuthentication resources enforce STRICT mTLS mode per namespace
+- AuthorizationPolicy resources implement zero-trust networking
+
+Observability:
+- Automatic distributed tracing via Jaeger (sampled at 1% in production)
+- Service topology map via Kiali
+- L7 metrics exposed to Prometheus automatically
+
+4.3 Load Balancing
+-------------------
+External traffic path:
+  Internet → AWS Route 53 → AWS CloudFront (CDN) → AWS ALB → Istio Ingress Gateway → Services
+
+Internal traffic path (service-to-service):
+  Service A → Istio Sidecar → mTLS → Istio Sidecar → Service B
+
+ALB configuration notes:
+- Sticky sessions disabled (stateless apps, session state in Redis)
+- HTTP → HTTPS redirect enforced at ALB level
+- Access logs sent to S3 for compliance retention (7 years)
+- WAF attached for OWASP top-10 protection
+
+============================================================
+5. OBSERVABILITY
+============================================================
+
+5.1 The Three Pillars
+----------------------
+We implement observability via metrics, logs, and traces:
+
+Metrics (Prometheus + Grafana):
+- All services expose /metrics endpoint in Prometheus exposition format
+- Prometheus scrapes every 15 seconds
+- Key SLI metrics: request rate, error rate, latency (p50/p95/p99)
+- Grafana dashboards defined as code (Jsonnet + Grafonnet library)
+
+Logs (Fluentd + Elasticsearch + Kibana):
+- All applications log to stdout in JSON format
+- Fluentd DaemonSet collects logs from all nodes
+- Log enrichment: Kubernetes labels, pod name, namespace added automatically
+- Retention: 30 days hot (Elasticsearch), 1 year cold (S3 Glacier)
+
+Traces (OpenTelemetry + Jaeger):
+- Services instrumented with OpenTelemetry SDK
+- Traces propagated via W3C TraceContext headers
+- Sampling: 100% for errors, 1% for successful requests in production
+- Trace retention: 7 days
+
+5.2 Alerting Strategy
+----------------------
+Alert routing via PagerDuty:
+- P1 (system down, data loss risk): Immediate page to on-call engineer
+- P2 (degraded service, SLA at risk): Page within 5 minutes
+- P3 (elevated error rate): Ticket created, engineer notified via Slack
+- P4 (warning threshold): Slack notification only, engineer reviews next business day
+
+Alert philosophy:
+- Alerts should only fire when human action is required
+- Every alert must have a runbook link in the annotation
+- Flapping alerts (firing/resolving repeatedly) are a bug — fix the root cause
+- Review and prune stale alerts in monthly on-call retrospective
+
+5.3 SLO Definitions
+--------------------
+Service Level Objectives for core services:
+
+API Gateway:
+- Availability: 99.95% (4.4 hours downtime/year budget)
+- Latency: 99th percentile < 500ms
+- Error rate: < 0.1% of requests return 5xx
+
+Database (read path):
+- Availability: 99.99%
+- Query latency: p99 < 50ms for indexed queries
+
+Embedding service:
+- Availability: 99.9% (8.7 hours/year budget)
+- Embedding generation: < 2 seconds for 1,000-token chunk
+- Semantic search: p95 < 200ms
+
+============================================================
+6. SECURITY ARCHITECTURE
+============================================================
+
+6.1 Zero-Trust Principles
+--------------------------
+We operate on the assumption that the network is always hostile:
+- Every service request is authenticated and authorized (not just network-level)
+- Least privilege access: services request only what they need
+- No standing access: engineers use just-in-time (JIT) access for production systems
+- Continuous verification: access tokens are short-lived (15 minutes), refreshed silently
+
+6.2 Secrets Management
+-----------------------
+All secrets managed via HashiCorp Vault:
+- Dynamic credentials: Database passwords rotate automatically every 24 hours
+- PKI: Vault issues short-lived TLS certificates for service-to-service mTLS
+- Secret injection: Kubernetes workloads get secrets via the Vault Agent Injector sidecar
+- Audit log: Every secret access is logged with identity, timestamp, and context
+
+Never:
+- Store secrets in environment variables in Dockerfiles
+- Commit secrets to Git (even temporarily)
+- Share service account credentials between services
+- Use long-lived static credentials for cloud resource access (use IAM roles instead)
+
+6.3 Supply Chain Security
+--------------------------
+Software supply chain hardening:
+- All dependencies scanned for CVEs via Dependabot + Snyk in CI
+- Container images scanned via Trivy before push to registry
+- SLSA Level 3: Build provenance attestation for all artifacts
+- Sigstore/Cosign: All container images signed; admission controller verifies signatures
+- SBOMs generated for all releases (CycloneDX format)
+
+============================================================
+7. COST OPTIMIZATION
+============================================================
+
+7.1 FinOps Practices
+---------------------
+Monthly cost review process:
+1. Pull cost breakdown by team/service tag from AWS Cost Explorer
+2. Review top 10 cost drivers
+3. Identify idle/underutilized resources (< 10% CPU for 7+ days)
+4. Review reserved instance coverage (target: 70% of baseline compute)
+5. Check Spot instance savings vs On-Demand ratio (target: 40%+ on non-critical workloads)
+
+7.2 Storage Cost Management
+-----------------------------
+S3 lifecycle policies (all buckets):
+- Tier to Infrequent Access (IA) after 30 days
+- Tier to Glacier Instant Retrieval after 90 days
+- Tier to Glacier Deep Archive after 365 days
+- Delete after 7 years (compliance retention limit)
+
+Database storage optimization:
+- Archive data older than 2 years to S3 Parquet (via pg_partman + pg_dump)
+- Use TOAST compression for large text columns (enabled by default in PostgreSQL)
+- Monitor table bloat via pg_bloat_check; schedule VACUUM FULL during maintenance windows
+
+7.3 Compute Right-Sizing
+-------------------------
+Automated right-sizing workflow:
+1. VPA runs in "recommendation mode" for 2 weeks for new deployments
+2. Engineer reviews VPA recommendations in monthly capacity review
+3. Updates applied during next deployment cycle
+4. GPU instances: scale to zero during off-hours (saves ~60% of GPU cost)
+
+============================================================
+END OF DOCUMENT
+============================================================

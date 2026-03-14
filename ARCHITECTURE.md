@@ -131,3 +131,34 @@ User queries graph via Graph Viewer / Query module
 7. **Step 7**: Natural language query → Cypher
 8. **Step 8**: SHACL validation engine
 9. **Step 9**: Export (RDF/OWL, JSON-LD)
+
+---
+
+## Backend Module Responsibilities (Step 2)
+
+| Module | Package | Responsibility |
+|--------|---------|----------------|
+| Ingestion | `app/ingestion/` | Read files/URLs, extract raw text, detect MIME type |
+| Preprocessing | `app/preprocessing/` | Clean text, detect language, chunk into AI-sized pieces |
+| Extraction | `app/extraction/` | NER, relationship detection, event extraction via AI |
+| Ontology | `app/ontology/` | CRUD for classes/properties, AI-powered entity alignment |
+| Graph | `app/graph/` | Neo4j client, write nodes/edges, query subgraphs |
+| Query | `app/query/` | NL→Cypher translation, query execution, result formatting |
+| Validation | `app/validation/` | SHACL rules, consistency checks, violation reporting |
+| Utils | `app/utils/` | JSON parsing, file ops, token counting, async helpers |
+| Schemas | `app/schemas/` | Pydantic request/response models for every module |
+| API Routes | `app/api/routes/` | One FastAPI router file per domain module |
+
+## API Surface (Step 2)
+
+| Method | Path | Module | Status |
+|--------|------|--------|--------|
+| GET | `/api/health` | system | ✅ Live |
+| POST/GET | `/api/ingest` | ingestion | 🔜 Stub |
+| POST/GET | `/api/extract` | extraction | 🔜 Stub |
+| GET/POST | `/api/ontology/classes` | ontology | ✅ Live (in-memory) |
+| POST | `/api/ontology/align` | ontology | 🔜 Stub |
+| POST | `/api/graph/write` | graph | 🔜 Stub |
+| GET | `/api/graph/subgraph/{id}` | graph | 🔜 Stub |
+| POST | `/api/query` | query | 🔜 Stub |
+| POST | `/api/validate` | validation | 🔜 Stub |

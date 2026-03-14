@@ -1,0 +1,46 @@
+Contract Review Notes — Q1 Vendor Assessment
+Internal Document — Procurement Team
+
+Overview
+
+This document summarizes the current status of agreements with our key suppliers and vendors. Several issues have been flagged for review by the legal team. Note: some of these records were entered by different team members and may use inconsistent terminology.
+
+Active Agreements
+
+Acme Corp has an active Master Services Agreement signed in January. The agreement is set to expire sometime in Q2, though the exact date is unclear from the original paperwork. Acme Corp also serves as our primary Vendor for logistics software. The company was initially onboarded as a Supplier for raw materials, which has created some classification confusion in the system.
+
+GlobalSoft Inc entered into a software licensing agreement with us last year. The contract with GlobalSoft Inc renews automatically unless terminated 90 days prior to expiry. The service provider has been flagged for performance issues in three separate incident reports. GlobalSoft Inc is categorized alternately as a Technology Provider and a Contractor in different parts of our system — this inconsistency needs to be resolved.
+
+The agreement with MegaRetail Ltd covers both distribution and warehousing. MegaRetail Ltd is classified as a customer in some records and as a Vendor in others. This dual classification should be standardized. The contract expires next quarter, but no renewal discussion has been initiated.
+
+Pending Issues
+
+Several contracts are approaching expiry without renewal decisions:
+- The service agreement with DataBridge Solutions (a technology contractor) has no documented expiry date
+- The supplier contract with Nexus Materials Corp expires in Q3 but lacks sign-off from procurement
+- An agreement with "the cloud vendor" (believed to be CloudNova Systems) was referenced in email threads but never formally documented
+
+Relationship Gaps
+
+The system shows no documented relationship between Acme Corp and MegaRetail Ltd, despite internal emails confirming that Acme Corp provides logistics support directly to MegaRetail Ltd under a sub-contractor arrangement.
+
+Similarly, GlobalSoft Inc and DataBridge Solutions appear to share engineering resources, but no formal partnership or subcontracting agreement is recorded.
+
+Contractor vs. Vendor Classification
+
+Our procurement system uses the following types inconsistently:
+- "Vendor" (external supplier of goods)
+- "Supplier" (raw material provider)
+- "Contractor" (services provider)
+- "customer" (lowercase, appears in legacy records)
+- "agreement" (sometimes used as an entity type in error)
+
+These should all be standardized. The legal team recommends consolidating to: Company, Contract, Person.
+
+Action Items
+
+1. Resolve dual classification of Acme Corp (Company vs Vendor)
+2. Document the CloudNova Systems agreement formally
+3. Initiate renewal discussion with MegaRetail Ltd
+4. Standardize entity types across the procurement system
+5. Add expiry date tracking for all active contracts

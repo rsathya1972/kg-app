@@ -1,0 +1,191 @@
+ENTERPRISE SOFTWARE BUNDLE AGREEMENT
+
+Contract ID: ESB-2024-0891
+Effective Date: February 1, 2024
+Renewal Date: January 31, 2025
+Expiration Date: January 31, 2027
+
+---
+
+PARTIES
+
+Seller:
+Axiom Software Technologies, Inc.
+2500 Silicon Valley Boulevard, Suite 900
+San Jose, California 95110
+("Axiom" or "Seller")
+Represented by: Victor Haines, Chief Revenue Officer
+
+Buyer:
+Consolidated Logistics Partners, LLC
+4400 Harbor View Drive
+Houston, Texas 77002
+("CLP" or "Buyer")
+Represented by: Margaret Fowler, Chief Procurement Officer
+
+---
+
+ARTICLE 1 — PRODUCTS AND SERVICES
+
+1.1 Contracted Products
+
+Axiom Software Technologies sells the following software products to Consolidated Logistics Partners under this Agreement:
+
+  a) Axiom FleetCommand — Enterprise fleet management platform. Licenses: 800 named users.
+  b) Axiom RouteOptimizer Pro — AI-powered route planning and logistics optimization engine. Licenses: 500 concurrent users.
+  c) Axiom DataVault — Secure cloud data warehouse solution. Storage: 50 TB allocated.
+  d) Axiom SupportDesk — ITSM and ticketing platform. Licenses: 150 agents.
+  e) Axiom Analytics Studio — Business intelligence and reporting suite. Licenses: 250 named users.
+
+1.2 Professional Services
+
+Axiom provides implementation and training services:
+  - Platform onboarding (FleetCommand + RouteOptimizer Pro): 120 hours
+  - Data migration from legacy SAP TM system: 80 hours
+  - Custom API integration with CLP's Oracle ERP: 60 hours
+  - End-user training sessions (Houston, TX headquarters): 5 days
+
+---
+
+ARTICLE 2 — LOCATIONS AND DEPLOYMENT
+
+2.1 Primary Deployment
+
+The software shall be deployed and accessed primarily from:
+  - CLP Headquarters: 4400 Harbor View Drive, Houston, Texas 77002
+  - CLP Regional Operations Center: 1200 Distribution Parkway, Memphis, Tennessee 38118
+  - CLP Pacific Hub: 8800 Port Terminal Road, Long Beach, California 90802
+
+2.2 Data Residency
+
+All CLP data stored in Axiom DataVault shall reside in Amazon Web Services (AWS) US-East-1 region (Northern Virginia) and US-West-2 region (Oregon) for disaster recovery purposes.
+
+---
+
+ARTICLE 3 — FEES AND PAYMENT
+
+3.1 Annual Subscription Fees
+
+  - Axiom FleetCommand: $480,000/year
+  - Axiom RouteOptimizer Pro: $320,000/year
+  - Axiom DataVault (50 TB): $180,000/year
+  - Axiom SupportDesk: $96,000/year
+  - Axiom Analytics Studio: $150,000/year
+  - Total Annual Subscription: $1,226,000/year
+
+3.2 Professional Services Fees
+
+  - Implementation and training: $185,000 (one-time)
+  - SAP TM migration: $64,000 (one-time)
+  - Oracle ERP integration: $48,000 (one-time)
+
+3.3 Payment Terms
+
+Invoices payable net 45 days. Annual subscription billed in advance on February 1 each year. Late payment accrues interest at prime rate + 2% per annum.
+
+---
+
+ARTICLE 4 — TERM AND RENEWAL
+
+4.1 Initial Term
+
+This Agreement has an initial term of three (3) years, effective February 1, 2024 through January 31, 2027.
+
+4.2 Renewal
+
+This Agreement automatically renews for successive one-year terms unless either party provides written notice of non-renewal at least ninety (90) days prior to the then-current expiration date.
+
+4.3 Renewal Pricing
+
+Subscription fees for each renewal term are subject to an annual increase not to exceed the greater of: (a) 5% or (b) the CPI increase for the prior year as published by the U.S. Bureau of Labor Statistics.
+
+---
+
+ARTICLE 5 — SERVICE LEVEL AGREEMENT
+
+5.1 Platform Uptime
+
+  - Axiom FleetCommand: 99.9% monthly uptime
+  - Axiom RouteOptimizer Pro: 99.9% monthly uptime
+  - Axiom DataVault: 99.99% monthly uptime
+
+5.2 Support Response Times
+
+  - Severity 1 (business-critical outage): 1-hour response, 4-hour resolution
+  - Severity 2 (major degradation): 2-hour response, 8-hour resolution
+  - Severity 3 (minor issue): 8-hour response, 72-hour resolution
+
+---
+
+ARTICLE 6 — TECHNOLOGY AND INTEGRATION
+
+6.1 Technology Stack
+
+Axiom's platform uses the following core technologies:
+  - Backend: Python 3.12, FastAPI, PostgreSQL 15, Redis 7.2
+  - Frontend: React 18, TypeScript
+  - Infrastructure: Kubernetes on AWS EKS, Terraform
+  - Monitoring: Datadog APM and Infrastructure
+  - Data pipeline: Apache Kafka 3.6, Apache Spark 3.5
+
+6.2 Integration Requirements
+
+CLP's integration landscape that Axiom products depend on:
+  - Oracle E-Business Suite R12.2 (ERP) — Axiom FleetCommand depends on Oracle ERP for financial data
+  - SAP Transportation Management 9.6 (legacy, being migrated) — RouteOptimizer Pro depends on SAP TM for historical route data
+  - Microsoft Azure Active Directory — all Axiom products use Azure AD for SSO/SAML 2.0 authentication
+
+---
+
+ARTICLE 7 — REGULATORY COMPLIANCE AND GOVERNING POLICIES
+
+7.1 Governing Law and Regulations
+
+This Agreement and the services provided hereunder are governed by:
+  - The laws of the State of California (governing law clause)
+  - SOC 2 Type II — Axiom maintains annual SOC 2 certification; all products governed by SOC 2 controls
+  - ISO/IEC 27001:2022 — Axiom's ISMS is certified; all cloud operations governed by ISO 27001
+  - GDPR (EU) 2016/679 — applicable to personal data of EU data subjects; governed by Axiom's Data Processing Agreement (DPA)
+  - CCPA (California Civil Code §1798.100) — applicable to California consumer data
+  - U.S. Export Administration Regulations (EAR) — Axiom software governed by EAR for export classification
+
+7.2 Policies
+
+  - Axiom Acceptable Use Policy (AUP v3.1) — governs CLP's use of all Axiom products
+  - Axiom Data Retention Policy — governs storage and deletion of CLP data in DataVault
+  - Axiom Incident Response Policy — governs breach notification (72-hour GDPR timeline applies)
+  - CLP Vendor Security Policy VPO-007 — Axiom's security practices must comply with VPO-007 requirements
+
+7.3 Audit Rights
+
+Consolidated Logistics Partners retains audit rights over Axiom's security controls upon 30-day written notice, conducted not more than once annually.
+
+---
+
+ARTICLE 8 — DATA OWNERSHIP AND INTELLECTUAL PROPERTY
+
+8.1 CLP retains ownership of all data submitted to or processed by Axiom products. Axiom receives only a limited license to process such data to provide the contracted services.
+
+8.2 Axiom retains all intellectual property rights in the software products.
+
+---
+
+ARTICLE 9 — TERMINATION
+
+9.1 Termination for convenience by either party requires 90 days written notice. Early termination by CLP before January 31, 2027 incurs an early termination fee equal to 50% of remaining subscription fees.
+
+9.2 Termination for cause upon material breach uncured within 30 days of written notice.
+
+---
+
+SIGNATURES
+
+For Axiom Software Technologies, Inc.:
+/s/ Victor Haines
+Victor Haines, Chief Revenue Officer
+Date: January 22, 2024
+
+For Consolidated Logistics Partners, LLC:
+/s/ Margaret Fowler
+Margaret Fowler, Chief Procurement Officer
+Date: January 25, 2024

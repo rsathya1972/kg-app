@@ -1,0 +1,126 @@
+INTERNAL ANNOUNCEMENT — ORGANIZATIONAL UPDATE
+Engineering & Platform Division
+
+From: Elena Vasquez, Chief Technology Officer
+To: All Engineering & Platform Staff
+Date: March 10, 2024
+Subject: Q1 2024 Org Restructure — New Reporting Lines, Team Assignments, and System Ownership
+
+---
+
+OVERVIEW
+
+Following the acquisition of Brightbridge Analytics and the launch of our new AI Platform initiative, we are realigning the Engineering & Platform Division effective April 1, 2024. This announcement covers new reporting lines, team memberships, system ownership transfers, and office location changes.
+
+---
+
+SECTION 1 — LEADERSHIP CHANGES
+
+1.1 New Reporting Structure
+
+The following changes take effect April 1, 2024:
+
+  - James Okafor (previously VP Engineering, Platform) is promoted to SVP Engineering. James will now report directly to Elena Vasquez (CTO). James owns the overall engineering roadmap and is responsible for the Platform, Data, and AI teams.
+
+  - Priya Subramaniam joins as VP of AI Platform (external hire from DeepMind). Priya reports to James Okafor. Priya leads the newly formed AI Platform team and owns the company's internal machine learning infrastructure, including ModelServe (our internal ML model serving platform) and the FeatureStore pipeline.
+
+  - Daniel Kowalski (previously Director of Data Engineering) is promoted to VP of Data Engineering. Daniel reports to James Okafor. Daniel's team belongs to the Platform Division and owns DataFlow (internal ETL orchestration system built on Apache Airflow 2.8) and the Analytics Data Warehouse (running on Snowflake).
+
+  - Ravi Choudhury (previously Senior Manager, Backend) becomes Director of Backend Engineering. Ravi reports to James Okafor. Ravi's team belongs to the Core Engineering Division.
+
+  - Sophia Brennan joins as Director of Site Reliability Engineering (external hire from Stripe). Sophia reports to James Okafor. Sophia owns Kubernetes infrastructure (our k8s cluster running on GKE), the Prometheus + Grafana monitoring stack, and PagerDuty alerting configuration.
+
+  - Marcus Lindqvist remains as Director of Security Engineering, now reporting to Elena Vasquez directly (previously reported to James Okafor). Marcus owns the Vault (HashiCorp Vault Enterprise) secrets management system and the SIEM platform (Splunk Enterprise Security).
+
+1.2 Brightbridge Analytics Integration
+
+Following the Brightbridge Analytics acquisition (closed February 14, 2024):
+
+  - Tara Goldstein (formerly CEO of Brightbridge Analytics) joins as VP of Product Analytics. Tara reports to Elena Vasquez. Tara's team belongs to the Product Division.
+
+  - Kevin Marsh (formerly CTO of Brightbridge Analytics) joins as Principal Engineer, Analytics Platform. Kevin reports to Daniel Kowalski. Kevin brings the Brightbridge Insight Engine, which belongs to the Analytics product suite and will be integrated with the Analytics Data Warehouse.
+
+---
+
+SECTION 2 — TEAM MEMBERSHIPS
+
+2.1 AI Platform Team (new, reports to Priya Subramaniam)
+
+Members and their roles:
+  - Anita Cheng — ML Infrastructure Engineer. Anita belongs to the AI Platform team. Anita owns the ModelServe deployment pipelines.
+  - Ben Harrington — MLOps Engineer. Ben belongs to the AI Platform team. Ben owns the FeatureStore pipeline and depends on DataFlow (Daniel Kowalski's system) for upstream data feeds.
+  - Yuki Tanaka — Research Engineer. Yuki belongs to the AI Platform team. Yuki uses PyTorch and Hugging Face Transformers for model development.
+
+2.2 Data Engineering Team (reports to Daniel Kowalski)
+
+  - Lena Petrov — Senior Data Engineer. Lena belongs to the Data Engineering team and is located in the Berlin, Germany office. Lena owns the European data pipeline which depends on DataFlow. Lena's pipeline is governed by GDPR (EU) 2016/679.
+  - Michael Torres — Data Engineer. Michael belongs to the Data Engineering team. Michael uses dbt (data build tool) and Snowflake for analytics data modeling.
+  - Kevin Marsh — Principal Engineer (as noted above).
+
+2.3 Backend Engineering Team (reports to Ravi Choudhury)
+
+  - Fatima Al-Hassan — Senior Backend Engineer. Fatima belongs to the Backend Engineering team. Fatima owns the Orders API (Python FastAPI service). The Orders API depends on PostgreSQL 15 (primary database) and Redis 7 (caching layer).
+  - Jordan Blake — Backend Engineer. Jordan belongs to the Backend Engineering team. Jordan uses Go for internal microservices and owns the Notification Service.
+  - Preethi Nair — Backend Engineer. Preethi belongs to the Backend Engineering team and is located in the Bangalore, India office.
+
+2.4 SRE Team (reports to Sophia Brennan)
+
+  - Carlos Mendez — Senior SRE. Carlos belongs to the SRE team and is located in the Austin, Texas office. Carlos owns the on-call rotation and depends on PagerDuty for incident escalation.
+  - Haruki Yamamoto — SRE. Haruki belongs to the SRE team. Haruki owns the Prometheus alerting rules and depends on Grafana for visualization.
+
+2.5 Security Engineering Team (reports to Marcus Lindqvist)
+
+  - Isabel Chen — Senior Security Engineer. Isabel belongs to the Security Engineering team. Isabel owns the Splunk dashboards and uses CrowdStrike Falcon for endpoint detection.
+  - Nathan Brooks — Security Engineer. Nathan belongs to the Security Engineering team. Nathan owns the Vault secret rotation policies and ensures all services use Vault for secret management. Nathan's work is governed by ISO/IEC 27001:2022 policy framework.
+
+---
+
+SECTION 3 — SYSTEM OWNERSHIP TRANSFERS
+
+Effective April 1, 2024, the following system ownership transfers are confirmed:
+
+  - ModelServe: owned by Priya Subramaniam's team (AI Platform). Previously owned by James Okafor.
+  - FeatureStore: owned by Ben Harrington (AI Platform). Depends on DataFlow.
+  - DataFlow (Apache Airflow 2.8): owned by Daniel Kowalski (Data Engineering). Other teams depend on DataFlow for data feeds.
+  - Analytics Data Warehouse (Snowflake): owned by Daniel Kowalski.
+  - Brightbridge Insight Engine: belongs to Analytics product suite; owned by Kevin Marsh; integration with Analytics Data Warehouse scheduled for Q2 2024.
+  - Orders API: owned by Fatima Al-Hassan; depends on PostgreSQL 15 and Redis 7.
+  - Kubernetes infrastructure (GKE): owned by Sophia Brennan.
+  - Vault (HashiCorp): owned by Marcus Lindqvist; all services governed by company secrets management policy SM-POL-003.
+  - Splunk SIEM: owned by Marcus Lindqvist; governed by Security Incident Response Policy SIR-POL-001.
+
+---
+
+SECTION 4 — OFFICE LOCATIONS
+
+The following staff are based in non-HQ offices:
+
+  - HQ (San Francisco, California): Elena Vasquez, James Okafor, Priya Subramaniam, Daniel Kowalski, Ravi Choudhury, Sophia Brennan, Marcus Lindqvist, Tara Goldstein, Anita Cheng, Fatima Al-Hassan, Jordan Blake, Carlos Mendez (remote), Kevin Marsh, Ben Harrington, Yuki Tanaka, Haruki Yamamoto, Isabel Chen, Nathan Brooks
+  - Berlin, Germany: Lena Petrov
+  - Bangalore, India: Preethi Nair
+  - Austin, Texas (remote): Carlos Mendez
+
+---
+
+SECTION 5 — POLICIES AND COMPLIANCE
+
+5.1 All engineering staff must comply with:
+  - Engineering Code of Conduct (Policy ENG-001)
+  - Remote Work Policy (Policy HR-RW-004)
+  - Data Classification and Handling Policy (Policy DCP-002)
+
+5.2 AI Platform work (Priya Subramaniam's team) is additionally governed by:
+  - AI Ethics and Responsible Use Policy (Policy AI-ETH-001, effective March 1, 2024)
+  - Model Risk Management Policy (Policy AI-MRM-002)
+
+5.3 Security Engineering work is governed by:
+  - ISO/IEC 27001:2022 controls (certified scope: all cloud infrastructure)
+  - SOC 2 Type II trust service criteria
+  - Security Incident Response Policy SIR-POL-001
+
+---
+
+Questions? Reach out to Elena Vasquez directly or post in #eng-org-updates on Slack.
+
+Elena Vasquez
+Chief Technology Officer

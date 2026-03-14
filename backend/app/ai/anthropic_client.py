@@ -1,9 +1,11 @@
 """
-Anthropic Claude API client placeholder.
-Real implementation added in a later step once AI pipelines are defined.
+Anthropic Claude API client.
 """
+import anthropic
+
 from app.config import settings
 from app.logger import get_logger
+from app.utils.async_utils import run_sync
 
 logger = get_logger(__name__)
 
@@ -15,6 +17,7 @@ class AnthropicClient:
         self._api_key = settings.ANTHROPIC_API_KEY
         if not self._api_key:
             logger.warning("ANTHROPIC_API_KEY is not set — AI calls will fail")
+        self._client = anthropic.Anthropic(api_key=self._api_key)
 
     async def complete(
         self,
@@ -35,14 +38,22 @@ class AnthropicClient:
 
         Returns:
             The assistant's response text.
-
-        Raises:
-            NotImplementedError: Until the real client is wired up.
         """
-        raise NotImplementedError(
-            "AnthropicClient.complete() is a placeholder. "
-            "Install `anthropic` and implement in a later step."
-        )
+        def _call() -> str:
+            kwargs: dict = {
+                "model": model,
+                "max_tokens": max_tokens,
+                "messages": [{"role": "user", "content": prompt}],
+            }
+            if system:
+                kwargs["system"] = system
+            response = self._client.messages.create(**kwargs)
+            return response.content[0].text
+
+        logger.debug("Claude request model=%s max_tokens=%d", model, max_tokens)
+        result = await run_sync(_call)
+        logger.debug("Claude response length=%d chars", len(result))
+        return result
 
 
 # Module-level singleton

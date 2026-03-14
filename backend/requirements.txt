@@ -4,9 +4,29 @@ pydantic==2.10.3
 pydantic-settings==2.6.1
 httpx==0.28.0
 sqlalchemy==2.0.36
+greenlet==3.3.2
 asyncpg==0.30.0
 alembic==1.14.0
 python-dotenv==1.0.1
 anthropic==0.40.0
 openai==1.57.0
 python-multipart==0.0.19
+
+# Document processing
+aiofiles==24.1.0
+
+# Text utilities
+tiktoken==0.8.0
+
+# MIME type detection (optional — falls back to mimetypes if not installed)
+python-magic==0.4.27
+
+# Vector similarity search (pgvector PostgreSQL extension)
+pgvector==0.3.6
+
+# Graph database
+neo4j>=5.0
+
+# Testing
+pytest==8.3.4
+pytest-asyncio==0.24.0

@@ -1,0 +1,45 @@
+Engineering Platform Overview — Tech Stack Audit Notes
+Internal — Infrastructure Team
+
+Background
+
+This document captures the current state of our engineering platform. It was compiled from multiple sources including Confluence pages, Slack threads, and verbal interviews. As a result, some terminology is inconsistent and entity types may overlap.
+
+Cloud Infrastructure
+
+The team currently runs workloads on AWS. Amazon Web Services hosts our primary production environment. The cloud handles auto-scaling, storage, and managed database services. AWS also provides our CDN layer through CloudFront. Note: some older documentation refers to "the cloud" generically when specifically meaning Amazon Web Services.
+
+Container Orchestration
+
+Kubernetes manages container workloads across three clusters. Docker is used for local development and CI/CD pipelines. The relationship between Kubernetes and Docker is well-understood by the team but has not been formally documented in the architecture registry.
+
+There is a Platform (our internal developer platform, called "DevHub") that sits on top of Kubernetes. DevHub abstracts Kubernetes complexity from product teams. However, DevHub is sometimes referenced as a "service" rather than a Platform in engineering tickets.
+
+Databases
+
+PostgreSQL is the primary relational database. Redis is used for caching and session management. Both are classified as "technology" in some records and "Tech" in others — capitalization is inconsistent. Elasticsearch is used for log aggregation and search; it is sometimes labeled as a "Software" component and sometimes as a "service".
+
+Monitoring and Observability
+
+Datadog handles metrics, logs, and APM. Grafana is used by the on-call team for dashboards (though some teams use Datadog dashboards instead). PagerDuty manages alerting and incident escalation. The relationship between Datadog, Grafana, and PagerDuty is implicit — all three are in the monitoring stack — but no formal dependency graph exists.
+
+Third-Party Integrations
+
+Stripe handles payment processing. Twilio is used for SMS notifications. SendGrid manages transactional email. These three services interact with our core product API but the integration points have not been formally mapped as relationships in the system.
+
+Terminology Inconsistencies Found
+
+During this audit, the following inconsistencies were flagged:
+- "technology" (lowercase) vs "Technology" vs "Tech" — all refer to the same entity type
+- "software" vs "Software" vs "service" — overlapping usage for the same class of entities
+- "Platform" vs "platform" vs "service" — DevHub is categorized differently in different systems
+- AWS is mentioned as "AWS", "Amazon Web Services", and "the cloud" — these are the same entity
+- Kubernetes is spelled "k8s" in some automation scripts (not linked to the full name)
+
+Gaps Identified
+
+1. No formal documentation of the Kubernetes → Docker dependency
+2. No relationship recorded between AWS and the Kubernetes clusters (which run on AWS EC2)
+3. Stripe, Twilio, and SendGrid have no relationships to the services that use them
+4. DevHub has no documented relationship to the product teams that depend on it
+5. Redis is not linked to any specific application service in the graph

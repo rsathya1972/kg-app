@@ -22,6 +22,19 @@ class Settings(BaseSettings):
     # CORS
     CORS_ORIGINS: List[str] = ["http://localhost:3000"]
 
+    # Storage
+    UPLOAD_DIR: str = "./storage/uploads"
+    OUTPUT_DIR: str = "./storage/outputs"
+
+    # Preprocessing / chunking
+    MAX_CHUNK_SIZE: int = 1000      # Max tokens per chunk
+    CHUNK_OVERLAP: int = 100        # Overlap tokens between chunks
+
+    # Vector memory / embeddings
+    OPENAI_EMBEDDING_MODEL: str = "text-embedding-3-small"
+    VECTOR_DIMENSIONS: int = 1536
+    VECTOR_SEARCH_TOP_K: int = 5
+
     class Config:
         env_file = ".env"
         env_file_encoding = "utf-8"
