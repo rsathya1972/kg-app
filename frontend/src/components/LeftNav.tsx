@@ -14,7 +14,6 @@ import {
   Bot,
   Brain,
   Activity,
-  HelpCircle,
 } from "lucide-react";
 
 const navItems = [
@@ -29,7 +28,6 @@ const navItems = [
   { href: "/validation", label: "Validation", icon: ShieldCheck },
   { href: "/semantic-search", label: "Semantic Search", icon: Sparkles },
   { href: "/agents", label: "Agent Monitor", icon: Bot },
-  { href: "/help", label: "Help & Docs", icon: HelpCircle },
 ];
 
 export default function LeftNav() {
